@@ -47,8 +47,40 @@ app.post("/register", async(req, res) => {
 })
 
 //login
-app.post("/login", (req, res) => {
-    res.send("user login endpoint reached")
+app.post("/login", async(req, res) => {
+    // res.send("user login endpoint reached")
+    try {
+        const {email, password} = req.body
+        if(!email || !password) {
+            return res.status(400).json({
+                error: true,
+                msg: "fields missing!"
+            })
+        }
+        const user = await User.findOne({email})
+        if(!user) {
+            return res.status(400).json({
+                error: true,
+                msg: "user not found!"
+            })
+        }
+        const matchPassword = await bcrypt.compare(password, user.password) 
+        if(!matchPassword) {
+            return res.status(400).json({
+                error: true,
+                msg: "invalid credentials!"
+            })
+        }
+        const token = jwt.sign({_id: user._id}, process.env.SECRET)
+        // console.log("test", matchPassword)  
+        return res.status(200).json({
+            error: false,
+            msg: "user found!",
+            token
+        })    
+    } catch (error) {
+        console.log("error in login endpoint", error)
+    }
 })
 
 //user feedback
