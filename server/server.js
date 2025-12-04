@@ -1,6 +1,12 @@
 const express = require("express")
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
+const User = require("./models/user.model")
+const mongoose = require("mongoose")
+require('dotenv').config()
 
 const app = express()
+app.use(express.json())
 
 app.get("/", (req, res) => {
     res.send("hello re")
@@ -8,8 +14,36 @@ app.get("/", (req, res) => {
 
 //user
 //register
-app.post("/register", (req, res) => {
-    res.send("user register endpoint reached")
+app.post("/register", async(req, res) => {
+    try {
+        const {name, email, password, role} = req.body
+        if (!name || !email || !password || !role) {
+            return res.status(400).json({
+                error: true,
+                msg: "Fields are missing!"
+            })
+        }
+        const user = await User.findOne({email})
+        if(user) {
+            return res.status(400).json({
+                error: true,
+                msg: "User already exists!",
+            })
+        }
+        const salt = await bcrypt.genSalt(12)
+        const hashedPassword = await bcrypt.hash(password, salt)
+        const newUser = new User({
+            name, email, password: hashedPassword, role
+        })
+        await newUser.save()
+        return res.status(201).json({
+            error: false,
+            msg: "User created!",
+            user: newUser
+        })
+    } catch (error) {
+        console.log("error in register endpoint", error)
+    }
 })
 
 //login
@@ -53,6 +87,14 @@ app.all('/*id', (req, res) => {
     res.send("not available")
 })
 
+mongoose.connect(process.env.MONGO)
+.then(() => {
+    console.log("mongo db connected!")
+})
+.catch(err => console.log("error connecting mongodb", err))
+
 app.listen(5000, () => {
     console.log("server is running on port 5000")
 })
+
+//connect mongodb and then test register endpoint
