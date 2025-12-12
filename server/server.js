@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const User = require("./models/user.model")
 const mongoose = require("mongoose")
+const Feedback = require("./models/feedback.model")
+const {validUser, validToken, isAdmin} = require("./middlewares/auth")
 require('dotenv').config()
 
 const app = express()
@@ -71,7 +73,7 @@ app.post("/login", async(req, res) => {
                 msg: "invalid credentials!"
             })
         }
-        const token = jwt.sign({_id: user._id}, process.env.SECRET)
+        const token = jwt.sign({_id: user._id, role: user.role}, process.env.SECRET)
         // console.log("test", matchPassword)  
         return res.status(200).json({
             error: false,
@@ -83,19 +85,20 @@ app.post("/login", async(req, res) => {
     }
 })
 
-//user feedback
-app.post('/feedback', (req, res) => {
-    res.send("user feedback endpoint reached")
+//user feedback //auth route
+app.post('/feedback',validToken, (req, res) => {
+    // res.send("user feedback endpoint reached")
+    console.log("testing", req)
 })
 
-//getting my feedback
-app.get('/feedback/me', (req, res) => {
+//getting my feedback //auth route
+app.get('/feedback/me', validToken, (req, res) => {
     res.send("my feedback endpoint reached")
 })
 
 //admin routes
 //get all feedback
-app.get('/feedback/all', (req, res) => {
+app.get('/feedback/all',validToken, isAdmin, (req, res) => {
     res.send("admin feedback endpoint reached") 
 })
 
