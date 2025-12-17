@@ -8,7 +8,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['user', "admin"],
         required: true
-    }
+    },
+    feedbacks: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "feedback"
+        }
+    ]
 },
     {
         timestamps: true

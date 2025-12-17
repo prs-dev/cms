@@ -12,12 +12,17 @@ const feedbackSchema = new mongoose.Schema({
         type: String,
         default: "submitted"
     },
-    attachment: String,
+    attachmentUrl: {
+        type:String,
+        default: ""
+    },
     adminNotes: [String],
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
+}, {
+    timestamps: true
 })
 
 module.exports = mongoose.model("Feedback", feedbackSchema)
