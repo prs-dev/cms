@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     feedbacks: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "feedback"
+            ref: "Feedback"
         }
     ]
 },

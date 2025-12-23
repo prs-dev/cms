@@ -122,7 +122,21 @@ app.post('/feedback', validToken, async (req, res) => {
 })
 
 //getting my feedback //auth route
-app.get('/feedback/me', validToken, (req, res) => {
+app.get('/feedback/me', validToken, async(req, res) => {
+    //two ways
+    //one way -- using user feedback array
+    try {
+        const user = await User.findById(req.userId).populate("feedbacks")
+        return res.status(200).json({
+            error: true,
+            msg: "feedbacks retrieved",
+            feedbacks: user.feedbacks
+        })
+        console.log("user", user)         
+    } catch (error) {
+        console.log("error in feedback me endpoint")
+    }
+    //second way == using feedback user field
     res.send("my feedback endpoint reached")
 })
 
