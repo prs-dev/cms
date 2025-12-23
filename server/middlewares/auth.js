@@ -9,7 +9,7 @@ const validToken = (req, res, next) => {
             msg: "invalid token!"
         })
     }
-    console.log("validity", validity)
+    // console.log("validity", validity)
     req.userId = validity._id
     req.userRole = validity.role
     next()
