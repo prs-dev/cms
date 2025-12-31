@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 
-const Login = () => {
+const Register = () => {
     const [state, setState ] = useState({
+        name: '',
         email: '',
         password: ''
     })
@@ -19,6 +20,10 @@ const Login = () => {
     return (
         <form action="" onSubmit={handleSubmit}>
             <div>
+                <label htmlFor="">Name</label>
+                <input type="text" name="name" onChange={handleChange}/>
+            </div>
+            <div>
                 <label htmlFor="">Email</label>
                 <input type="email" name="email" onChange={handleChange}/>
             </div>
@@ -33,4 +38,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default Register
