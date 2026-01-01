@@ -5,7 +5,9 @@ const Layout = () => {
   return (
     <div>
       <Navbar />
-      <main>
+      <main style={{
+        
+      }}>
         <Outlet />
         {/* learn outlet in react-router-dom */}
       </main>
