@@ -6,7 +6,7 @@ const Layout = () => {
     <div>
       <Navbar />
       <main style={{
-        
+        height: 'calc(100vh - 70px)'
       }}>
         <Outlet />
         {/* learn outlet in react-router-dom */}

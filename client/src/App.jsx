@@ -7,7 +7,7 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 
 const App = () => {
-  const loggedIn = false
+  const loggedIn = true
   return (
     <Router>
       <Routes>
